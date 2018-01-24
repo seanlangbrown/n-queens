@@ -158,14 +158,13 @@
       var rows = this.rows();
       var piecesOnDiagonal = 0;
 
-      for (var i = 0; i < rows.length; i ++) {
-        for (var j = 0; j < rows.legnth; j++) {
-          if (this._getFirstRowColumnIndexForMajorDiagonalOn(i, j) === majorDiagonalColumnIndexAtFirstRow && rows[i][j] === 1) {
-            if (piecesOnDiagonal === 1) {
-              return true;
-            }
-            piecesOnDiagonal = 1;
+      for (var i = 0; i < rows.length && j < rows.length; i ++) {
+        var j = majorDiagonalColumnIndexAtFirstRow + i;
+        if (this._getFirstRowColumnIndexForMajorDiagonalOn(i, j) === majorDiagonalColumnIndexAtFirstRow && rows[i][j] === 1) {
+          if (piecesOnDiagonal === 1) {
+            return true;
           }
+          piecesOnDiagonal = 1;
         }
       }
       return false; // fixme
