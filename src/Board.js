@@ -101,7 +101,7 @@
           return tot + piece;
         }, 0);
       });
-      console.log(rowCounts);
+      //console.log(rowCounts);
 
       return _.some(rowCounts, function(count) {
         return count > 1;
@@ -116,12 +116,35 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      //get a single column
+      var rows = this.rows();
+      var col = _.map(rows, function(row) {
+        return row[colIndex];
+      });
+      //if sum of pieces in column is > 1, return true
+      return _.reduce(col, function(tot, piece) {
+        return tot + piece;
+      }, 0) > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      var columnsWithPieces = [];
+
+      for(var i = 0; i < rows.length; i++) {
+        for(var j = 0; j < rows.length; j++) {
+          if (rows[i][j] === 1) {
+            if(columnsWithPieces[j] === 1) { //the first time we find more than one piece in a row, return true
+              return true;
+            }
+            columnsWithPieces[j]  = 1;
+          }
+        }
+      }
+
+      return false;
+
     },
 
 
