@@ -62,14 +62,14 @@
     },
 
 
-/*
-         _             _     _
-     ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
-    / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
-    \__ \ || (_| | |  | |_  | | | |  __/ | |  __/_
-    |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
+    /*
+             _             _     _
+         ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
+        / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
+        \__ \ || (_| | |  | |_  | | | |  __/ | |  __/_
+        |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
 
- */
+     */
     /*=========================================================================
     =                 TODO: fill in these Helper Functions                    =
     =========================================================================*/
@@ -79,12 +79,34 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      console.log('called hasRowConflictAt');
+      //return false; // fixme
+      //get row
+      var row = this.rows()[rowIndex];
+      //sum contents
+      var pieces = _.reduce(row, function(tot, piece) {
+        return tot + piece;
+      }, 0);
+      //if sum > 1: return true
+      return pieces > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      //for each row, check conflits (sum queens)
+      //if any row sum > 1; return true
+      var rows = this.rows();
+      var rowCounts = _.map(rows, function(row) {
+        return _.reduce(row, function(tot, piece) {
+          return tot + piece;
+        }, 0);
+      });
+      console.log(rowCounts);
+
+      return _.some(rowCounts, function(count) {
+        return count > 1;
+      });
+      
     },
 
 
