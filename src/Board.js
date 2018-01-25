@@ -223,7 +223,6 @@
         var first = false;
         for (var j = minorDiagonalColumnIndexAtFirstRow; j > -1; j--) {
           //if j is negative, ignore this loop
-          if (rows[i] === undefined) {debugger}
           if (rows[i][j] === 1) {
             if (first) {
               return true;
@@ -290,6 +289,41 @@
       return false;
     },
     
+    hasPieceAtLoc: function(i, j) {
+      var rows = this.rows();
+      if (rows[i][j] === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    
+    nRooksIterator: function(callback) {
+      var n = this.attributes.n;
+      var rows = this.rows();
+      for (var i = 0; i < n; i++) {
+        for (var j = 0; j < n; j++) {
+          callback.call(this, rows[i][j], i, j);
+        }
+      }
+    },
+    
+    nRooksSolutionWorker: function(value, i, j) {
+      if (value === 1) {
+        return;
+      } else {
+        var newRows = this.rows();
+        var board = new Board(newRows);
+        board.togglePiece(i, j);
+        if (!(board.hasAnyRooksConflicts())) {
+          board.nRooksIterator(board.nRooksSolutionWorker);
+        }
+      }
+    }
+    
+    //IMPORTANT:
+    //need mother function to call nRooksIterator and nRooksSolutionWorker.
+    //also to create solution array, and add to it in even to solution.
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
