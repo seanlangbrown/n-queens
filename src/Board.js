@@ -141,22 +141,43 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      
-      var rows = this.rows();
-      var i = 0;
-      var first = false;
-      for (var j = majorDiagonalColumnIndexAtFirstRow; j < rows.length; j++) {
-        //if j is negative, ignore this loop
-        if (rows[i][j] === 1) {
-          if (first) {
-            return true;
-          } else {
-            first = true; 
+      if (majorDiagonalColumnIndexAtFirstRow > 0) {
+        var rows = this.rows();
+        var i = 0;
+        var first = false;
+        for (var j = majorDiagonalColumnIndexAtFirstRow; j < rows.length; j++) {
+          //if j is negative, ignore this loop
+          if (rows[i][j] === 1) {
+            if (first) {
+              return true;
+            } else {
+              first = true; 
+            }
           }
+          i++;
         }
-        i++;
+        return false;
+      } else {
+        var start = -1 * majorDiagonalColumnIndexAtFirstRow;
+        var rows = this.rows();
+        var n = this.get('n');
+        //loop through remaining diagonals
+        var j = 0;
+        var first = false;
+        for (var i = start; i < n; i++) {
+          //iterate over elements in diagonal
+          if (rows[i][j] === 1) {
+            if (first) {
+              return true;
+            } else {
+              first = true;
+            }
+          }
+          j++;
+        }
+        
+        return false;
       }
-      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -197,20 +218,46 @@
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
       var rows = this.rows();
-      var i = 0;
-      var first = false;
-      for (var j = minorDiagonalColumnIndexAtFirstRow; j > -1; j--) {
-        //if j is negative, ignore this loop
-        if (rows[i][j] === 1) {
-          if (first) {
-            return true;
-          } else {
-            first = true; 
+      if (minorDiagonalColumnIndexAtFirstRow < rows.length) {
+        var i = 0;
+        var first = false;
+        for (var j = minorDiagonalColumnIndexAtFirstRow; j > -1; j--) {
+          //if j is negative, ignore this loop
+          if (rows[i] === undefined) {debugger}
+          if (rows[i][j] === 1) {
+            if (first) {
+              return true;
+            } else {
+              first = true; 
+            }
           }
+          i++;
         }
-        i++;
+        return false;
+      } else {
+        var rows = this.rows();
+        var n = this.get('n');
+        var start = minorDiagonalColumnIndexAtFirstRow - n;
+        
+        //loop through remaining diagnonals
+        var j = n - 1;
+        var first = false;
+        for (var i = start; i < rows.length; i++) {
+          //loop through elements in diagonal
+          if (rows[i][j] === 1) {
+            if (first) {
+              return true;
+            } else {
+              first = true;
+            }
+          }
+          j--;
+        }
+        
+        return false;
       }
-      return false;
+      
+      
     },
 
     // test if any minor diagonals on this board contain conflicts
