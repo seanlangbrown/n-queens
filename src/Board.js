@@ -23,6 +23,14 @@
         return this.get(rowIndex);
       }, this);
     },
+    
+    rowCopys: function() {
+      var copy = [];
+      for (var i = 0; i < this.get('n'); i++) {
+        copy.push(this.rows()[i].slice());
+      }
+      return copy;
+    },
 
     togglePiece: function(rowIndex, colIndex) {
       this.get(rowIndex)[colIndex] = + !this.get(rowIndex)[colIndex];
@@ -298,27 +306,63 @@
       }
     },
     
+    countPieces: function() {
+      var sum = 0;
+      for (var i = 0; i < this.attributes.n; i++) {
+        for (var j = 0; j < this.attributes.n; j++) {
+          sum = sum + this.attributes[i][j];
+        }
+      }
+      return sum;
+    },
+    
     nRooksIterator: function(callback) {
       var n = this.attributes.n;
       var rows = this.rows();
+      var results = [];
       for (var i = 0; i < n; i++) {
         for (var j = 0; j < n; j++) {
-          callback.call(this, rows[i][j], i, j);
+          results = results.concat(callback.call(this, rows[i][j], i, j));
         }
       }
+      //console.log('Iterator results: ' + JSON.stringify(results));
+      return results;
+      //callback needs to return an array
+      //it takes in value, i, j
+      //it should not have any side effects
+      //it is bound to the 'this' in nRooksIterator. 'this' is a board object
     },
     
     nRooksSolutionWorker: function(value, i, j) {
+      var ans = [];
+      //console.log(this.rows());
+      
       if (value === 1) {
-        return;
-      } else {
-        var newRows = this.rows();
-        var board = new Board(newRows);
-        board.togglePiece(i, j);
-        if (!(board.hasAnyRooksConflicts())) {
-          board.nRooksIterator(board.nRooksSolutionWorker);
+        return [];
+      } /*else if (this.countPieces() >= this.attributes.n) {
+        console.log('found a solution for ' + this.get('n') + ' rooks');
+        return this.rows();
+        //solutionHandler.call(this);
+        */
+      var newRows = this.rowCopys();
+      
+      var board = new Board(newRows);
+      board.togglePiece(i, j);
+      //console.log('this board: ' + JSON.stringify(this.rows()) + '\nNew board w piece: ' + JSON.stringify(board.rows()));
+      if (!(board.hasAnyRooksConflicts())) {
+        if (board.countPieces() >= board.attributes.n) {
+          console.log('found a solution for ' + board.get('n') + ' rooks');
+          console.log('About to return: ' + JSON.stringify(board.rows()));
+          ans.push(board.rows());
+        //might want to push on to ans
         }
+        ans = ans.concat(board.nRooksIterator(board.nRooksSolutionWorker));
+        /*var temp = board.nRooksIterator(board.nRooksSolutionWorker);
+        ans = ans.concat(temp);
+        */
+        
       }
+      return ans;
     }
     
     //IMPORTANT:
