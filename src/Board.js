@@ -316,14 +316,13 @@
       return sum;
     },
     
-    nRooksIterator: function(callback) {
+    nRooksIterator: function(callback, iStart) {
       var n = this.attributes.n;
       var rows = this.rows();
       var results = [];
-      for (var i = 0; i < n; i++) {
-        for (var j = 0; j < n; j++) {
-          results = results.concat(callback.call(this, rows[i][j], i, j));
-        }
+      for (var j = 0; j < n; j++) {
+        //if(iStart === 1) {debugger;}
+        results = results.concat(callback.call(this, rows[iStart][j], iStart, j));
       }
       //console.log('Iterator results: ' + JSON.stringify(results));
       return results;
@@ -355,8 +354,9 @@
           console.log('About to return: ' + JSON.stringify(board.rows()));
           ans.push(board.rows());
         //might want to push on to ans
+        } else {
+          ans = ans.concat(board.nRooksIterator(board.nRooksSolutionWorker, i + 1));
         }
-        ans = ans.concat(board.nRooksIterator(board.nRooksSolutionWorker));
         /*var temp = board.nRooksIterator(board.nRooksSolutionWorker);
         ans = ans.concat(temp);
         */

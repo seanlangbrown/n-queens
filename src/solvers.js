@@ -18,7 +18,7 @@
 window.findNRooksSolution = function(n) {
   var solution = [];
   var board = new Board({n: n});
-  var solution = board.nRooksIterator(board.nRooksSolutionWorker);
+  var solution = board.nRooksIterator(board.nRooksSolutionWorker, 0);
   
   /*(value, i, j, function() {
     solution.push(this);
