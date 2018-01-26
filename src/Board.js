@@ -7,6 +7,7 @@
   window.Board = Backbone.Model.extend({
 
     initialize: function (params) {
+      this.set('nQueens', true);
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
         console.log('\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
@@ -334,27 +335,24 @@
     
     nRooksSolutionWorker: function(value, i, j) {
       var ans = [];
-      //console.log(this.rows());
       
       if (value === 1) {
         return [];
-      } /*else if (this.countPieces() >= this.attributes.n) {
-        console.log('found a solution for ' + this.get('n') + ' rooks');
-        return this.rows();
-        //solutionHandler.call(this);
-        */
+      } 
       var newRows = this.rowCopys();
       
       var board = new Board(newRows);
       board.togglePiece(i, j);
+      board.set('nQueens', this.get('nQueens'));
       //console.log('this board: ' + JSON.stringify(this.rows()) + '\nNew board w piece: ' + JSON.stringify(board.rows()));
-      if (!(board.hasAnyRooksConflicts())) {
+      if ((board.get('nQueens') && !(board.hasAnyQueensConflicts())) || (!(board.get('nQueens')) && !(board.hasAnyRooksConflicts()))) {
         if (board.countPieces() >= board.attributes.n) {
-          console.log('found a solution for ' + board.get('n') + ' rooks');
+          console.log('found a solution for ' + board.get('n') + 'pieces, queens = ' + this.get('nQueens'));
           console.log('About to return: ' + JSON.stringify(board.rows()));
           ans.push(board.rows());
         //might want to push on to ans
         } else {
+          
           ans = ans.concat(board.nRooksIterator(board.nRooksSolutionWorker, i + 1));
         }
         /*var temp = board.nRooksIterator(board.nRooksSolutionWorker);
