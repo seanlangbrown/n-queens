@@ -60,6 +60,12 @@ describe('Board', function() {
       [0, 0, 0, 0],
       [0, 0, 1, 0]
     ]);
+    verifyConflictTypes(['majorDiagonal', 'queens', 'row', 'rooks'], [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [1, 0, 0, 0],
+      [0, 1, 1, 0]
+    ]);
   });
 
   describe('Board with minor diagonal conflicts', function() {
