@@ -339,27 +339,21 @@
       if (value === 1) {
         return [];
       } 
-      var newRows = this.rowCopys();
       
-      var board = new Board(newRows);
-      board.togglePiece(i, j);
-      board.set('nQueens', this.get('nQueens'));
-      //console.log('this board: ' + JSON.stringify(this.rows()) + '\nNew board w piece: ' + JSON.stringify(board.rows()));
-      if ((board.get('nQueens') && !(board.hasAnyQueensConflicts())) || (!(board.get('nQueens')) && !(board.hasAnyRooksConflicts()))) {
-        if (board.countPieces() >= board.attributes.n) {
-          console.log('found a solution for ' + board.get('n') + 'pieces, queens = ' + this.get('nQueens'));
-          console.log('About to return: ' + JSON.stringify(board.rows()));
-          ans.push(board.rows());
-        //might want to push on to ans
+      this.togglePiece(i, j);
+      this.set('nQueens', this.get('nQueens'));
+      if ((this.get('nQueens') && !(this.hasAnyQueensConflicts())) || (!(this.get('nQueens')) && !(this.hasAnyRooksConflicts()))) {
+        if (this.countPieces() >= this.attributes.n) {
+          console.log('found a solution for ' + this.get('n') + 'pieces, queens = ' + this.get('nQueens'));
+          console.log('About to return: ' + JSON.stringify(this.rows()));
+          ans.push(this.rowCopys());
         } else {
           
-          ans = ans.concat(board.nRooksIterator(board.nRooksSolutionWorker, i + 1));
+          ans = ans.concat(this.nRooksIterator(this.nRooksSolutionWorker, i + 1));
         }
-        /*var temp = board.nRooksIterator(board.nRooksSolutionWorker);
-        ans = ans.concat(temp);
-        */
         
       }
+      this.togglePiece(i, j);
       return ans;
     }
     
